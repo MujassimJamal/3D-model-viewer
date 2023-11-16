@@ -7,8 +7,8 @@ function main() {
 
   const renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
 
-  const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-  camera.position.set(0,-120,8);
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.set(0, -120, 8);
 
   const controls = new TrackballControls(camera, renderer.domElement);
   controls.rotateSpeed = 5;
@@ -23,26 +23,30 @@ function main() {
   scene.add(camera);
 
   const aLight = new THREE.AmbientLight(0xffffff, 0.3);
-  aLight.position.set(0,1,0);
+  aLight.position.set(0, 1, 0);
   camera.add(aLight);
   scene.add(camera);
 
-  var loader = new STLLoader();
-  loader.load("../models/Maxilla_0.1.stl", function (geometry) {
-    const material = new THREE.MeshPhongMaterial({
-      color: 0xffffff, 
-      intensity: 2, 
-      flatShading: true,
-      
+  function loadModel(name) {
+    var loader = new STLLoader();
+    var path = "../models/" + name;
+    loader.load(path, function (geometry) {
+      const material = new THREE.MeshPhongMaterial({
+        color: 0xffffff,
+        intensity: 2,
+        flatShading: true,
+
+      });
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.geometry.center();
+      scene.add(mesh);
+
+      fitCameraToModel(camera, mesh, 2);
     });
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.geometry.center();
-    scene.add(mesh);
+  }
+  loadModel("Abutments_0.1.stl");
 
-    fitCameraToModel(camera, mesh, 2);
-  });
-
-  function fitCameraToModel(camera, model, zoomOutFactor){
+  function fitCameraToModel(camera, model, zoomOutFactor) {
     const boundingBox = new THREE.Box3().setFromObject(model);
     const center = boundingBox.getCenter(new THREE.Vector3());
     const size = boundingBox.getSize(new THREE.Vector3());
