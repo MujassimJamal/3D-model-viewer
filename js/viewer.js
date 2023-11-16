@@ -2,8 +2,26 @@ import * as THREE from "three";
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader";
 import { TrackballControls } from "three/examples/jsm/controls/TrackballControls";
 
-function main() {
+
+export function loadSTLModel(modelName) {
   const canvas = document.querySelector("#c");
+
+  
+  var path = "../models/" + modelName;
+  // Some css customization stuff
+  var abutmentBtn = document.querySelector("#abutment");
+  var maxillaBtn = document.querySelector("#maxilla");
+  if (modelName === "Abutments_0.1.stl") {
+    abutmentBtn.style.cssText = "position: absolute; top:150px; left:50px; width: 60px; height: 60px; -moz-box-shadow: 0 0 5px #fff; -webkit-box-shadow: 0 0 5px #fff; box-shadow: 0px 0px 5px #fff;"
+    maxillaBtn.style.cssText = "position: absolute; top:240px; left:50px; width: 60px; height: 60px;";
+  } else if (modelName === "Maxilla_0.1.stl") {
+    maxillaBtn.style.cssText = "position: absolute; top:240px; left:50px; width: 60px; height: 60px; -moz-box-shadow: 0 0 5px #fff; -webkit-box-shadow: 0 0 5px #fff; box-shadow: 0px 0px 5px #fff;"
+    abutmentBtn.style.cssText = "position: absolute; top:150px; left:50px; width: 60px; height: 60px;";
+  } else {
+    path = modelName;
+    abutmentBtn.style.cssText = "position: absolute; top:150px; left:50px; width: 60px; height: 60px;";
+    maxillaBtn.style.cssText = "position: absolute; top:240px; left:50px; width: 60px; height: 60px;";
+  }
 
   const renderer = new THREE.WebGLRenderer({ antialias: true, canvas });
 
@@ -27,24 +45,21 @@ function main() {
   camera.add(aLight);
   scene.add(camera);
 
-  function loadModel(name) {
-    var loader = new STLLoader();
-    var path = "../models/" + name;
-    loader.load(path, function (geometry) {
-      const material = new THREE.MeshPhongMaterial({
-        color: 0xffffff,
-        intensity: 2,
-        flatShading: true,
 
-      });
-      const mesh = new THREE.Mesh(geometry, material);
-      mesh.geometry.center();
-      scene.add(mesh);
+  var loader = new STLLoader();
+  loader.load(path, function (geometry) {
+    const material = new THREE.MeshPhongMaterial({
+      color: 0xffffff,
+      emissiveIntensity: 2,
+      flatShading: true,
 
-      fitCameraToModel(camera, mesh, 2);
     });
-  }
-  loadModel("Abutments_0.1.stl");
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.geometry.center();
+    scene.add(mesh);
+
+    fitCameraToModel(camera, mesh, 2);
+  });
 
   function fitCameraToModel(camera, model, zoomOutFactor) {
     const boundingBox = new THREE.Box3().setFromObject(model);
@@ -98,4 +113,4 @@ function main() {
   requestAnimationFrame(render);
 }
 
-main();
+loadSTLModel("Abutments_0.1.stl");
