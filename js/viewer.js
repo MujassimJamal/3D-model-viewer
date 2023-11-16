@@ -1,6 +1,6 @@
-import * as THREE from "../node_modules/three";
-import { STLLoader } from "../node_modules/three/examples/jsm/loaders/STLLoader";
-import { TrackballControls } from "../node_modules/three/examples/jsm/controls/TrackballControls";
+import * as THREE from "three";
+import { STLLoader } from "three/examples/jsm/loaders/STLLoader";
+import { TrackballControls } from "three/examples/jsm/controls/TrackballControls";
 
 function main() {
   const canvas = document.querySelector("#c");
