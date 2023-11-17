@@ -1,6 +1,6 @@
-import * as THREE from "../node_modules/three/build/three.module.js";
-import { STLLoader } from "../node_modules/three/examples/jsm/loaders/STLLoader.js";
-import { TrackballControls } from "../node_modules/three/examples/jsm/controls/TrackballControls.js";
+import * as THREE from "three";
+import { STLLoader } from "three/addons/loaders/STLLoader";
+import { TrackballControls } from "three/addons/controls/TrackballControls";
 
 
 export function loadSTLModel(modelName) {
