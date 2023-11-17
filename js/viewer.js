@@ -76,8 +76,8 @@ export function loadSTLModel(modelName) {
   };
   
   THREE.DefaultLoadingManager.onError = function ( url ) {
-    // console.log( 'There was an error loading ' + url );
-    alert("Error loading the model");
+    console.log( 'There was an error loading ' + url );
+    // alert("Error loading the model");
   };
 
   function fitCameraToModel(camera, model, zoomOutFactor) {
