@@ -22,6 +22,11 @@
 </head>
 
 <body>
+  <div class='h-100 w-100 d-flex align-items-center justify-content-center' style='position: absolute;' id="spinnerParent">
+    <div style='position: absolute;' class='spinner-border text-primary' role='status' id="spinnerChild"></div>
+  </div>
+
+
   <button id="load" class="btn btn-dark" style="position: absolute; top:15px; left:15px;"
     onclick="openFileManager()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
       class="bi bi-upload" viewBox="0 0 16 16">
@@ -44,6 +49,7 @@
   </canvas>
 
   <input id="model-input" type="file" name="name" style="display: none;" accept=".stl" />
+
 </body>
 <script>
   function openFileManager() {

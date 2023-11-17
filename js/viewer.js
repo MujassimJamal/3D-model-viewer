@@ -6,7 +6,7 @@ import { TrackballControls } from "three/addons/controls/TrackballControls";
 export function loadSTLModel(modelName) {
   const canvas = document.querySelector("#c");
 
-  
+
   var path = "models/" + modelName;
   // Some css customization stuff
   var abutmentBtn = document.querySelector("#abutment");
@@ -61,23 +61,27 @@ export function loadSTLModel(modelName) {
     fitCameraToModel(camera, mesh, 1.7);
   });
 
-  THREE.DefaultLoadingManager.onStart = function ( url, itemsLoaded, itemsTotal ) {
+  THREE.DefaultLoadingManager.onStart = function (url, itemsLoaded, itemsTotal) {
     // console.log( 'Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
-    alert("Loading the model... Please wait for a few seconds.");
+    var spinnerDiv = " <div class='h-100 w-100 d-flex align-items-center justify-content-center' style='position: absolute;' id='spinnerParent'><div style='position: absolute;' class='spinner-border text-primary' role='status' id='spinnerChild'></div></div>";
+    document.body.insertAdjacentHTML('afterbegin', spinnerDiv);
   };
-  
-  THREE.DefaultLoadingManager.onLoad = function ( ) {
-    console.log( 'Loading Complete!');
+
+  THREE.DefaultLoadingManager.onLoad = function () {
+    var spinnerParent = document.getElementById("spinnerParent");
+    if (spinnerParent) {
+      document.body.removeChild(spinnerParent);
+    }
+    console.log('Loading Complete!');
   };
-  
-  THREE.DefaultLoadingManager.onProgress = function ( url, itemsLoaded, itemsTotal ) {
-    console.log( 'Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
+
+  THREE.DefaultLoadingManager.onProgress = function (url, itemsLoaded, itemsTotal) {
+    console.log('Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.');
 
   };
-  
-  THREE.DefaultLoadingManager.onError = function ( url ) {
-    console.log( 'There was an error loading ' + url );
-    // alert("Error loading the model");
+
+  THREE.DefaultLoadingManager.onError = function (url) {
+    alert("There was an error loading the model.");
   };
 
   function fitCameraToModel(camera, model, zoomOutFactor) {
