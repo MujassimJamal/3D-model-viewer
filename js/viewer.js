@@ -12,10 +12,10 @@ export function loadSTLModel(modelName) {
   var abutmentBtn = document.querySelector("#abutment");
   var maxillaBtn = document.querySelector("#maxilla");
   if (modelName === "Abutments_0.1.stl") {
-    abutmentBtn.style.cssText = "position: absolute; top:150px; left:50px; width: 60px; height: 60px; -moz-box-shadow: 0 0 5px #fff; -webkit-box-shadow: 0 0 5px #fff; box-shadow: 0px 0px 5px #fff;"
+    abutmentBtn.style.cssText += "-moz-box-shadow: 0 0 5px #fff; -webkit-box-shadow: 0 0 5px #fff; box-shadow: 0px 0px 5px #fff;"
     maxillaBtn.style.cssText = "position: absolute; top:240px; left:50px; width: 60px; height: 60px;";
   } else if (modelName === "Maxilla_0.1.stl") {
-    maxillaBtn.style.cssText = "position: absolute; top:240px; left:50px; width: 60px; height: 60px; -moz-box-shadow: 0 0 5px #fff; -webkit-box-shadow: 0 0 5px #fff; box-shadow: 0px 0px 5px #fff;"
+    maxillaBtn.style.cssText += "-moz-box-shadow: 0 0 5px #fff; -webkit-box-shadow: 0 0 5px #fff; box-shadow: 0px 0px 5px #fff;"
     abutmentBtn.style.cssText = "position: absolute; top:150px; left:50px; width: 60px; height: 60px;";
   } else {
     path = modelName;
@@ -28,32 +28,30 @@ export function loadSTLModel(modelName) {
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.set(0, -120, 8);
 
-  const controls = new TrackballControls(camera, renderer.domElement);
-  controls.rotateSpeed = 3;
-  controls.update();
-
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x2a2b2e);
 
-  const light = new THREE.DirectionalLight(0xffffff, 2);
-  light.position.set(-1, 2, 4);
-  camera.add(light);
+  const dirLight = new THREE.DirectionalLight(0xffffff, 2);
+  dirLight.position.set(-1, 2, 4);
+  camera.add(dirLight);
   scene.add(camera);
 
-  const aLight = new THREE.AmbientLight(0xffffff, 0.3);
-  aLight.position.set(0, 1, 0);
-  camera.add(aLight);
-  scene.add(camera);
+  const ambLight = new THREE.AmbientLight(0xffffff, 0.3);
+  ambLight.position.set(0, 1, 0);
+  scene.add(ambLight);
 
+  const controls = new TrackballControls(camera, renderer.domElement);
+  controls.rotateSpeed = 3;
+  controls.update();
 
   var loader = new STLLoader();
   loader.load(path, function (geometry) {
     const material = new THREE.MeshPhongMaterial({
       color: 0xffffff,
       emissiveIntensity: 2,
-      flatShading: true,
 
     });
+
     const mesh = new THREE.Mesh(geometry, material);
     mesh.geometry.center();
     scene.add(mesh);
@@ -62,7 +60,6 @@ export function loadSTLModel(modelName) {
   });
 
   THREE.DefaultLoadingManager.onStart = function (url, itemsLoaded, itemsTotal) {
-    // console.log( 'Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
     var spinnerDiv = " <div class='h-100 w-100 d-flex align-items-center justify-content-center' style='position: absolute;' id='spinnerParent'><div style='position: absolute;' class='spinner-border text-primary' role='status' id='spinnerChild'></div></div>";
     document.body.insertAdjacentHTML('afterbegin', spinnerDiv);
   };
@@ -75,10 +72,7 @@ export function loadSTLModel(modelName) {
     console.log('Loading Complete!');
   };
 
-  THREE.DefaultLoadingManager.onProgress = function (url, itemsLoaded, itemsTotal) {
-    console.log('Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.');
-
-  };
+  THREE.DefaultLoadingManager.onProgress = function (url, itemsLoaded, itemsTotal) { };
 
   THREE.DefaultLoadingManager.onError = function (url) {
     alert("There was an error loading the model.");
@@ -93,14 +87,15 @@ export function loadSTLModel(modelName) {
     const fov = camera.fov * (Math.PI / 180);
     const distance = Math.abs(maxDim / (2 * Math.tan(fov / 2))) * zoomOutFactor;
 
-    // Set camera position and target
     camera.position.copy(center);
     camera.position.z += distance;
     camera.up.set(0, 1, 0);
     camera.lookAt(center);
+
+    camera.updateProjectionMatrix();
+    controls.update();
   }
 
-  // Responsive
   function resizeRendererToDisplaySize(renderer) {
     const canvas = renderer.domElement;
     const width = canvas.clientWidth;
@@ -109,30 +104,26 @@ export function loadSTLModel(modelName) {
     if (needResize) {
       renderer.setSize(width, height, false);
     }
+    
+    controls.update();
     return needResize;
   }
-  renderer.render(scene, camera);
 
-  // Movement
-  function render(time) {
-    time *= 0.001;
-
-    // Resolution
+  function render() {
     if (resizeRendererToDisplaySize(renderer)) {
       const canvas = renderer.domElement;
       camera.aspect = canvas.clientWidth / canvas.clientHeight;
+
       camera.updateProjectionMatrix();
       controls.update();
     }
 
-    const canvas = renderer.domElement;
-    camera.aspect = canvas.clientWidth / canvas.clientHeight;
-    camera.updateProjectionMatrix();
-    controls.update();
-    requestAnimationFrame(render);
     renderer.render(scene, camera);
+    requestAnimationFrame(render);
   }
+
   requestAnimationFrame(render);
 }
 
+// Default model on startup
 loadSTLModel("Abutments_0.1.stl");
