@@ -29,7 +29,7 @@ export function loadSTLModel(modelName) {
   camera.position.set(0, -120, 8);
 
   const controls = new TrackballControls(camera, renderer.domElement);
-  controls.rotateSpeed = 5;
+  controls.rotateSpeed = 3;
   controls.update();
 
   const scene = new THREE.Scene();
