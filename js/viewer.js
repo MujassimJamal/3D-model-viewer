@@ -7,7 +7,7 @@ export function loadSTLModel(modelName) {
   const canvas = document.querySelector("#c");
 
   
-  var path = "../models/" + modelName;
+  var path = "models/" + modelName;
   // Some css customization stuff
   var abutmentBtn = document.querySelector("#abutment");
   var maxillaBtn = document.querySelector("#maxilla");
