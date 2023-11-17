@@ -1,6 +1,6 @@
-import * as THREE from "three";
-import { STLLoader } from "three/examples/jsm/loaders/STLLoader";
-import { TrackballControls } from "three/examples/jsm/controls/TrackballControls";
+import * as THREE from "../node_modules/three/build/three.module.js";
+import { STLLoader } from "../node_modules/three/examples/jsm/loaders/STLLoader.js";
+import { TrackballControls } from "../node_modules/three/examples/jsm/controls/TrackballControls.js";
 
 
 export function loadSTLModel(modelName) {
@@ -58,8 +58,27 @@ export function loadSTLModel(modelName) {
     mesh.geometry.center();
     scene.add(mesh);
 
-    fitCameraToModel(camera, mesh, 2);
+    fitCameraToModel(camera, mesh, 1.7);
   });
+
+  THREE.DefaultLoadingManager.onStart = function ( url, itemsLoaded, itemsTotal ) {
+    // console.log( 'Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
+    alert("Loading the model... Please wait for a few seconds.");
+  };
+  
+  THREE.DefaultLoadingManager.onLoad = function ( ) {
+    console.log( 'Loading Complete!');
+  };
+  
+  THREE.DefaultLoadingManager.onProgress = function ( url, itemsLoaded, itemsTotal ) {
+    console.log( 'Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
+
+  };
+  
+  THREE.DefaultLoadingManager.onError = function ( url ) {
+    // console.log( 'There was an error loading ' + url );
+    alert("Error loading the model");
+  };
 
   function fitCameraToModel(camera, model, zoomOutFactor) {
     const boundingBox = new THREE.Box3().setFromObject(model);
@@ -75,7 +94,6 @@ export function loadSTLModel(modelName) {
     camera.position.z += distance;
     camera.up.set(0, 1, 0);
     camera.lookAt(center);
-
   }
 
   // Responsive
