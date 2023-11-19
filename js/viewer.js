@@ -60,7 +60,7 @@ export function loadSTLModel(modelName) {
   });
 
   THREE.DefaultLoadingManager.onStart = function (url, itemsLoaded, itemsTotal) {
-    var spinnerDiv = " <div class='h-100 w-100 d-flex align-items-center justify-content-center' style='position: absolute;' id='spinnerParent'><div style='position: absolute;' class='spinner-border text-primary' role='status' id='spinnerChild'></div></div>";
+    var spinnerDiv = "<div class='h-100 w-100 d-flex align-items-center justify-content-center' style='position: absolute;' id='spinnerParent'><div style='position: absolute;' class='spinner-border text-primary' role='status' id='spinnerChild'></div><span class='sr-only' style='position: absolute; padding-top: 90px; color: white;'>Loading, Please wait...</span></div>";
     document.body.insertAdjacentHTML('afterbegin', spinnerDiv);
   };
 
