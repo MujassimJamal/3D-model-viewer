@@ -104,7 +104,7 @@ export function loadSTLModel(modelName) {
     if (needResize) {
       renderer.setSize(width, height, false);
     }
-    
+
     controls.update();
     return needResize;
   }
@@ -117,6 +117,12 @@ export function loadSTLModel(modelName) {
       camera.updateProjectionMatrix();
       controls.update();
     }
+
+    const canvas = renderer.domElement;
+    camera.aspect = canvas.clientWidth / canvas.clientHeight;
+
+    camera.updateProjectionMatrix();
+    controls.update();
 
     renderer.render(scene, camera);
     requestAnimationFrame(render);
