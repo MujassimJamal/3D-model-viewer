@@ -1,1 +1,1 @@
-# 3D-model-viewer - Nov 18 12:21
+You can upload any STL-formatted model to visualize in the browser.
